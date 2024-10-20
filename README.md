@@ -14,6 +14,10 @@ https://cygwin.com/install.html.
 2. A copy of the CAP3 binary, for the 32-bit version of Cygwin:
 https://faculty.sites.iastate.edu/xqhuang/cap3-assembly-program.
 
+3. Python 3.9.18 (other versions may work as well)
+
+4. Biopython 1.81 (other versions may work as well)
+
 ## How to Assemble Plasmid Sequences:
 
 1. Prepare the .ab1 files using an appropriate directory organization. The
