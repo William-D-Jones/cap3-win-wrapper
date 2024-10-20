@@ -20,32 +20,40 @@ https://faculty.sites.iastate.edu/xqhuang/cap3-assembly-program.
 program is intended to be used with one sequencing directory where all your
 .ab1 files are located, organized by run. For example:
 ```
-C:\sequencing\run1\seq1.ab1
-C:\sequencing\run2\seq1.ab1
-C:\sequencing\run2\seq2.ab1
+C:\sequencing\dna_sequencing_run1692\dna_sequencing_sample1.ab1
+C:\sequencing\dna_sequencing_run3498\dna_sequencing_sample2.ab1
+C:\sequencing\dna_sequencing_run2984\dna_sequencing_sample3.ab1
+C:\sequencing\dna_sequencing_run2323\dna_sequencing_sample4.ab1
 ```
 
-2. Write a tab-separated design file for the wrapper program. The first field
-is the name of the contig to be assembled, and each subsequent field is
-a sequence read to be added to the assembly, in the format RUNNAME_SAMPLENAME.
-The read fields are broken at the first underscore, so subsequent underscores
-are allowed if needed to unambiquously distinguish .ab1 files in the sequencing
-directory. The program will search for .ab1 files using wildcards:
+2. Write a tab-separated design file for the wrapper program (see `samples`
+directory for an example).
+* The first field is the name of the contig to be assembled.
+* Each subsequent field is a sequence read to be added to the assembly, in the 
+format RUNNAME_SAMPLENAME.
+
+The read fields are broken at the first underscore (therefore, underscores
+are allowed in SAMPLENAME but not RUNNAME).
+The program will search for .ab1 files using wildcards:
 ```
 *RUNNAME*\*SAMPLENAME*.ab1
 ```
 Therefore, it is important to add enough information to RUNNAME and SAMPLENAME
-to unambiguously identify each .ab1 file. See the Tests section below for an
+to unambiguously identify each .ab1 file. See the `samples` directory for an
 example of a design file. Comment lines beginning with # are skipped.
 
-3. Run cap3-win-wrapper.py (see Program Usage and Tests sections below).
+3. Run cap3-win-wrapper.py (see Program Usage section below). For example, for
+the sample design file, we would run:
+```
+python cap3-win-wrapper.py -c sample.sh /cygdrive/c/CAP3/cap3 sample_design.txt
+C:\sequencing\
+```
 
 4. If a `bash` script is requested, open the Cygwin emulator and run the
 `bash` script to call `cap3` and assemble the sequencing reads.
-
-## Tests:
-
-
+```
+$ ./sample.sh
+```
 
 ## Program Usage:
 
