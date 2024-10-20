@@ -68,8 +68,3 @@ def _write_cap_sh(name,pathToCAP3,dictDes):
     sh.writelines(lines)
     sh.close()
 
-
-    #with open(name,mode="w",newline="\n") as sh:
-    #    writer=csv.writer(
-    #            sh,dialect="unix",delimiter="",quoting=csv.QUOTE_NONE)
-    #    writer.writerows(lines)
