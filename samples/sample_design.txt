@@ -1,0 +1,10 @@
+# This sample would work for a directory structured like this:
+# C:\sequencing\dna_sequencing_run1692\dna_sequencing_sample1.ab1
+# C:\sequencing\dna_sequencing_run3498\dna_sequencing_sample2.ab1
+# C:\sequencing\dna_sequencing_run2984\dna_sequencing_sample3.ab1
+# C:\sequencing\dna_sequencing_run2323\dna_sequencing_sample4.ab1
+#
+# You can make a contig consisting of many .ab1 files, even if they come from separate runs
+plasmid_assembly_1	run1692_sample1	run3498_sample2	run2984_sample3	run2323_sample4
+# You can also use only a subset of the data from each file
+plasmid_assembly_2	run1692_sample1:1-500	run3498_sample2:250-689	run2984_sample3	run2323_sample4

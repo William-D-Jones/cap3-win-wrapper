@@ -36,7 +36,7 @@ directory. The program will search for .ab1 files using wildcards:
 ```
 Therefore, it is important to add enough information to RUNNAME and SAMPLENAME
 to unambiguously identify each .ab1 file. See the Tests section below for an
-example of a design file.
+example of a design file. Comment lines beginning with # are skipped.
 
 3. Run cap3-win-wrapper.py (see Program Usage and Tests sections below).
 
