@@ -14,7 +14,8 @@ def _read_design(pathToDesign,listOfTemplates):
         the design file a ValueError is raised. If None, all non-comment
         lines are read.
 
-    Returns a dictionary in which each key TEMPLATE returns a list of RUN_READ.
+    Returns a dictionary in which each key TEMPLATE returns a list of 
+    RUN_READ:FIRST-LAST.
     """
 
     if listOfTemplates is not None:

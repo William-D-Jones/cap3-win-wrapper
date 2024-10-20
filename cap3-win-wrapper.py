@@ -11,7 +11,9 @@ paMain=ap.ArgumentParser(description=
 paMain.add_argument("designfile",help="Tab-separated file containing the \
         template names and sequencing reads in the format RUNNAME_SAMPLENAME. \
         SAMPLENAME but not RUNNAME can contain the underscore character. \
-        Lines beginning with # are ignored.",metavar="FILE.tsv",type=str)
+        Lines beginning with # are ignored. Optionally, a subset of the read \
+        can be selected using the format RUNNAME_SAMPLENAME:FIRST-LAST, using \
+        a 1-indexed range FIRST-LAST.",metavar="FILE.tsv",type=str)
 paMain.add_argument("readpath",help="Parent path of the run directories \
         containing .ab1 reads. Sequencing reads must be named \
         *RUNNAME*/*SAMPLENAME*.ab1, so no other folders or files in readpath \
@@ -31,10 +33,10 @@ paNames=paMain.parse_args()
 dictDes=cw._io._read_design(paNames.designfile,paNames.templates)
 
 # Identify the sequencing reads
-dictPaths=cw._conversion._design2paths(dictDes,paNames.readpath)
+dictPaths,dictRanges=cw._conversion._design2paths(dictDes,paNames.readpath)
 
 # Convert .ab1 to .fa and .qual files
-cw._conversion._ab2faqual(dictDes,dictPaths)
+cw._conversion._ab2faqual(dictDes,dictPaths,dictRanges)
 
 # Write the batch file if requested
 if paNames.cap3run is not None:

@@ -1,6 +1,7 @@
 import os
 import glob
 from Bio import SeqIO
+import re
 
 def _design2paths(dictDes,pathToReads):
     """
@@ -8,22 +9,32 @@ def _design2paths(dictDes,pathToReads):
     .ab1 sequence files and folders in a directory.
 
     dictDes: the design dictionary, in which keys named TEMPLATE return a list
-        of entries in the form RUN_READ
+        of entries in the form RUN_READ:FIRST-LAST
     pathToReads: the directory to search
 
-    Returns a dictionary in which each key TEMPLATE returns a list of paths to
-    .ab1 files.
+    Returns:
+    * A dictionary in which each key TEMPLATE returns a list of paths to
+        .ab1 files.
+    * A dictionary in which each key TEMPLATE returns a list of tuples, which
+        give the 0-indexed range of each read sequence to be analyzed. The 
+        tuple entry (0,0) indicates that the entire sequence should be 
+        analyzed.
     """
 
     lTemp=list(dictDes.keys())
     dictPaths={}
+    dictRanges={}
     for temp in lTemp:
         lPaths=[]
+        lRanges=[]
         for read in dictDes[temp]:
-            readSpl=read.split("_",1) # Split read name at first underscore
-            if len(readSpl)!=2:
+            readSpl=read.split("_",1) # parse read name at the first _
+            if len(readSpl)>1:
+                readSpl=[readSpl[0]]+re.split(":|-",readSpl[1]) # parse range
+            if len(readSpl)!=2 and len(readSpl)!=4:
                 raise ValueError(
-                        "".join(["Read name ",read," does not contain _"]))
+                        "".join(["Read name ",read," must match the format ",\
+                                "RUN_READ or RUN_READ:FIRST-LAST"]))
             pathPattern=os.path.join(
                     pathToReads,
                     "".join(["*",readSpl[0],"*"]),
@@ -37,11 +48,17 @@ def _design2paths(dictDes,pathToReads):
                     raise ValueError(
                             "".join(["Read ",read," matches multiple files"]))
             lPaths.append(pathExp[0])
+            if len(readSpl)==4:
+                lRanges.append((int(readSpl[2])-1,int(readSpl[3])))
+            else:
+                lRanges.append((0,0))
+                
         dictPaths[temp]=lPaths
+        dictRanges[temp]=lRanges
 
-    return dictPaths
+    return dictPaths,dictRanges
 
-def _ab2faqual(dictDes,dictPaths):
+def _ab2faqual(dictDes,dictPaths,dictRanges):
     """
     Using a design dictionary and a dictionary of .ab1 paths, constructs, for
     each .ab1 file, a .fa file (without file extension) and .qual file whose
@@ -52,6 +69,9 @@ def _ab2faqual(dictDes,dictPaths):
         of entries in the form RUN_READ
     dictPaths: the paths dictionary, in which keys named TEMPLATE return a
         list of file paths in the same order as dictDes
+    dictRanges: the ranges dictionary, in which keys named TEMPLATE return a
+        list of tuples giving the sequence range to be selected from each
+        read. Note that ranges are 0-indexed.
 
     Writes the .fa and .qual files to the working directory.
     """
@@ -62,7 +82,12 @@ def _ab2faqual(dictDes,dictPaths):
         # Read in all the .ab1 files sequenced from the template
         lSeq=list()
         for i in range(len(dictDes[temp])):
-            lSeq.append(SeqIO.read(dictPaths[temp][i],"abi"))
+            if dictRanges[temp][i]!=(0,0):
+                sl=slice(*dictRanges[temp][i])
+                seq=SeqIO.read(dictPaths[temp][i],"abi")[sl]
+            else:
+                seq=SeqIO.read(dictPaths[temp][i],"abi")
+            lSeq.append(seq)
             lSeq[i].id=dictDes[temp][i]
 
         # Write the .fa and .qual files using UNIX-style line endings
