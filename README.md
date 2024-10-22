@@ -18,6 +18,12 @@ https://faculty.sites.iastate.edu/xqhuang/cap3-assembly-program.
 
 4. Biopython 1.81 (other versions may work as well)
 
+## Getting Started:
+
+```
+git clone https://github.com/William-D-Jones/cap3-win-wrapper.git
+```
+
 ## How to Assemble Plasmid Sequences:
 
 1. Prepare the .ab1 files using an appropriate directory organization. The
