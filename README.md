@@ -55,8 +55,7 @@ example of a design file. Comment lines beginning with # are skipped.
 3. Run cap3-win-wrapper.py (see Program Usage section below). For example, for
 the sample design file, we would run:
 ```
-python cap3-win-wrapper.py -c sample.sh /cygdrive/c/CAP3/cap3 sample_design.txt
-C:\sequencing\
+python cap3-win-wrapper.py -c sample.sh /cygdrive/c/CAP3/cap3 sample_design.txt C:\sequencing\
 ```
 
 4. If a `bash` script is requested, open the Cygwin emulator and run the
