@@ -30,8 +30,12 @@ def _design2paths(dictDes,pathToReads):
         for read in dictDes[temp]:
             readSpl=read.split("_",1) # parse read name at the first _
             if len(readSpl)>1:
-                readSpl=[readSpl[0]]+re.split(":|-",readSpl[1]) # parse range
+                if ':' in readSpl[-1]:
+                    readSpl=readSpl[:-1]+readSpl[-1].split(':')
+                    if '-' in readSpl[-1]:
+                        readSpl=readSpl[:-1]+readSpl[-1].split('-')
             if len(readSpl)!=2 and len(readSpl)!=4:
+                print(readSpl)
                 raise ValueError(
                         "".join(["Read name ",read," must match the format ",\
                                 "RUN_READ or RUN_READ:FIRST-LAST"]))
