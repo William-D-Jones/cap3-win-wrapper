@@ -24,6 +24,14 @@ paMain.add_argument("-c","--cap3run",help="Name of the CAP3 .sh \
         and the location of the CAP3 executable in Cygwin format without any \
         executable extensions, example: MYCAP.sh /cygdrive/c/CAP3/cap3",
         metavar="PATH",default=None,type=str,nargs=2)
+paMain.add_argument("-a","--cap3args",help="Text file containing additional \
+        command-line options to be passed to CAP3. Options can be provided in \
+        any order, but if multiple options are provided, they must be \
+        newline-separated. See CAP3 documentation for possible options. For \
+        example, to specify a base quality cutoff of 30 for clipping, provide \
+        a text file with the single line '-c 30'. Comments beginning with # \
+        are removed.",
+        metavar="\"CAP3_ARGUMENTS\"",default=None,type=str)
 paMain.add_argument("-t","--templates",help="List of templates to assemble. \
         Omit to assemble all templates.",metavar="TEMPLATE",type=str,nargs="*",
         default=None)
@@ -40,6 +48,7 @@ cw._conversion._ab2faqual(dictDes,dictPaths,dictRanges)
 
 # Write the batch file if requested
 if paNames.cap3run is not None:
-    cw._io._write_cap_sh(paNames.cap3run[0],paNames.cap3run[1],dictDes)
+    cw._io._write_cap_sh(paNames.cap3run[0],paNames.cap3run[1],\
+    paNames.cap3args,dictDes)
 
 print("".join(["Processed ",str(len(dictDes))," templates."]))
